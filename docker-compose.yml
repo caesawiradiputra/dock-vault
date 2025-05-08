@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - "${DATA_ROOT:-./credential-manager-data}/config:/app/config"
+      - "${DATA_ROOT:-./credential-manager-data}/data:/app/data"
+      - "${DATA_ROOT:-./credential-manager-data}/backups:/app/backups"
+      - "${DATA_ROOT:-./credential-manager-data}/logs:/app/logs"
+    environment:
+      - FLASK_ENV=production
+      - CONFIG_PATH=/app/config/config.ini
+      - DATA_PATH=/app/data/credentials.dat
+      - BACKUP_PATH=/app/backups
+      - LOG_PATH=/app/logs
+    restart: unless-stopped

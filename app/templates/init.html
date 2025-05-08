@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Initialize Credential Manager</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Initialize Credential Manager</h1>
+        <form id="initForm">
+            <div class="form-group">
+                <label for="masterKey">Create Master Password</label>
+                <input type="password" id="masterKey" required minlength="8">
+                <div class="password-strength">
+                    <progress id="strengthMeter" value="0" max="5"></progress>
+                    <span id="strengthText"></span>
+                </div>
+            </div>
+            <button type="submit">Initialize</button>
+        </form>
+    </div>
+    <script src="/static/js/init.js"></script>
+</body>
+</html>
