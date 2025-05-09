@@ -1,6 +1,6 @@
 # DockVault
 
-DockVault is a secure, self-hosted credential management system designed for local use, with full encryption, a web-based interface, and Docker support.
+**DockVault** is a secure, self-hosted credential management system built with Python and Flask, designed for **local-first usage**. It encrypts credentials using AES, runs in Docker, and offers a web-based interface for managing sensitive configuration files.
 
 ## Features
 
@@ -32,8 +32,8 @@ docker run -d -p 5000:5000 -v ./data:/app/data dock-vault
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/dockv-ault.git
-cd dockvault
+git clone https://github.com/yourusername/dock-vault.git
+cd dock-vault
 ```
 
 Create and activate a virtual environment:
