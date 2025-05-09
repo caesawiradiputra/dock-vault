@@ -5,6 +5,7 @@ from configs.config import BASE_DIR
 from configs.logging import configure_logger, logger
 from flask import Flask
 
+app = None
 
 def create_app():
     """Application factory"""
