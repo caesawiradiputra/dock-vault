@@ -34,7 +34,7 @@ jobs:
 
     - name: Determine branch-based tag
       run: |
-        if [[ "${{ env.BRANCH_NAME }}" == "master" ]]; then
+        if [[ "${{ env.BRANCH_NAME }}" == "master" || "${{ env.BRANCH_NAME }}" == "master" ]]; then
           echo "BRANCH_TAG=latest" >> $GITHUB_ENV
         elif [[ "${{ env.BRANCH_NAME }}" == "dev" ]]; then
           echo "BRANCH_TAG=release" >> $GITHUB_ENV

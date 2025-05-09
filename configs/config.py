@@ -1,3 +1,4 @@
+import os
 import platform
 from pathlib import Path
 
@@ -13,6 +14,8 @@ def get_data_root():
     else:  # Linux/Mac
         return Path.home() / "credential-manager-data"
 
+
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 BASE_DIR = get_data_root()
 CONFIG_PATH = BASE_DIR / "config/config.ini"

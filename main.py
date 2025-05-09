@@ -1,11 +1,9 @@
 import os
 
 from app.routes import bp as main_bp
-from configs.config import BASE_DIR
+from configs.config import BASE_DIR, DEBUG
 from configs.logging import configure_logger, logger
 from flask import Flask
-
-app = None
 
 def create_app():
     """Application factory"""
@@ -43,12 +41,13 @@ def create_app():
     return app
 
 
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
     logger.debug(f"routes: {app.route}")
     try:
-        logger.info("Starting development server on http://0.0.0.0:5000")
-        app.run(host="0.0.0.0", port=5000, debug=True)
+        logger.info(f"Starting {'development' if app.debug else 'production'} server on http://0.0.0.0:5000")
+        app.run(host="0.0.0.0", port=5000, debug=DEBUG)
     except Exception as e:
         logger.critical(f"Application failed to start: {e}")
         raise
