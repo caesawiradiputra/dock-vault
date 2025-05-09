@@ -1,0 +1,61 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker Image Tag'
+        required: true
+        default: 'latest'
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+run-name: "Docker Build & Push - Tag: ${{ github.event.inputs.image_tag }} - Branch: ${{ github.ref_name }}"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: "patstarc/dock-vault"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Extract branch name
+      run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+    - name: Determine branch-based tag
+      run: |
+        if [[ "${{ env.BRANCH_NAME }}" == "master" ]]; then
+          echo "BRANCH_TAG=latest" >> $GITHUB_ENV
+        elif [[ "${{ env.BRANCH_NAME }}" == "dev" ]]; then
+          echo "BRANCH_TAG=release" >> $GITHUB_ENV
+        elif [[ "${{ env.BRANCH_NAME }}" == "sit" ]]; then
+          echo "BRANCH_TAG=sit" >> $GITHUB_ENV
+        else
+          echo "BRANCH_TAG=custom" >> $GITHUB_ENV
+        fi
+
+    - name: Set IMAGE_TAG from input
+      run: echo "IMAGE_TAG=${{ github.event.inputs.image_tag }}" >> $GITHUB_ENV
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+    - name: Build the Docker image
+      run: |
+        docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+        docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}
+
+    - name: Push Docker Image to Docker Hub
+      run: |
+        docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        docker push ${{ env.IMAGE_NAME }}:${{ env.BRANCH_TAG }}
